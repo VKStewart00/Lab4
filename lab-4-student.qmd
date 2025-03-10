@@ -152,7 +152,7 @@ Remember that now we are reading back in a data file of type `csv`. Now when you
 ```{r}
 #| label: load-data-again
 
-#loading data, but as a csv this time
+#loading data, but as a csv this time, also removes some values.  
 
 buoyUpdate <- read_csv( "data-raw/buoy_update.csv",
                        na = c('99','999', 'NA'))
@@ -166,12 +166,13 @@ Here is the code you can use to fix the data without exporting and importing aga
 #| label: parse-double
 
 
-# turn every column into 'character'
-buoyUpdate <- buoyUpdate |> mutate(across(everything(), as.character))
-
-# then turn every column into a double
-buoy_final <- buoyUpdate |> 
+# turn every column into 'character', then turn them into doubles. 
+buoyUpdate <- buoyUpdate|> 
+  mutate(across(everything(), as.character))|>
   mutate(across(.cols = everything(), ~parse_double(.x)))
+
+
+  
 ```
 
 
