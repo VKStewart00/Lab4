@@ -47,6 +47,7 @@ In the code chunk below, load in the packages necessary for your analysis. You s
 
 ```{r}
 #| label: setup
+#| echo: false
 
 library(tidyverse)
 library(janitor)
@@ -80,6 +81,8 @@ When you read in the data give it an appropriate name for what the data represen
 
 ```{r}
 #| label: load-data
+#| echo: false
+
 
 # Need to tell R the path to the data
 
@@ -162,7 +165,11 @@ Here is the code you can use to fix the data without exporting and importing aga
 ```{r}
 #| label: parse-double
 
+
+# turn every column into 'character'
 buoyUpdate <- buoyUpdate |> mutate(across(everything(), as.character))
+
+# then turn every column into a double
 buoy_final <- buoyUpdate |> 
   mutate(across(.cols = everything(), ~parse_double(.x)))
 ```
@@ -200,6 +207,7 @@ geom_smooth(i)+
   # Does the nice points
   geom_point(aes(x = mm,
          y = atmp,
+         alpha = factor(mm),
          color = factor(mm)
          ))+
   
@@ -232,7 +240,7 @@ One fun source for data is [Tidy Tuesday](https://github.com/rfordatascience/tid
 
 **For your found data write a brief description of the data and and provide its source.**
 
-> Carbon Majors Emissions Data:  This dataset consist of carbon emissions spanning back to 1854.  Some possible questions; Which industry is responsiable for the most amount of CO2 emissions, or which level of company (State, private, or National) is responsible for the most emissions.  
+> Carbon Majors Emissions Data:  This dataset consist of carbon emissions spanning back to 1854.  Some possible questions; Which industry is responsiable for the most amount of CO2 emissions, or which level of company (State, private, or National) are responsible for the most emissions.  
 
 
 
