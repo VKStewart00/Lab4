@@ -1,10 +1,12 @@
 ---
 title: 'Lab 4'
 author: 'Van K Stewart'
-ouput: html_document
 embed-resources: true
 code-tools: true
 echo: true
+format: html
+execute:
+  eval: false
 ---
 
 # Part 1: Setup
