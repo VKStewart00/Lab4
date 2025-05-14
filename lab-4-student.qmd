@@ -86,10 +86,8 @@ When you read in the data give it an appropriate name for what the data represen
 #| echo: false
 
 
-# Need to tell R the path to the data
-
-buoyData <- read_table("data-raw/buoy_2024.txt"
-                       )
+## Need to tell R the path to the data
+buoyData <- read_table("data-raw/buoy_2024.txt")
 
 
 ```
@@ -138,7 +136,7 @@ buoyData3 <- read_table("data-raw/buoy_2024.txt",
                         clean_names()
 
 #write the formatted file into a csv
-write_csv(buoyData3, "data-raw/buoy_update.csv")
+write_csv(buoyData3, "data-clean/buoy_update.csv")
 ```
 
 
@@ -156,7 +154,7 @@ Remember that now we are reading back in a data file of type `csv`. Now when you
 
 #loading data, but as a csv this time, also removes some values.  
 
-buoyUpdate <- read_csv( "data-raw/buoy_update.csv",
+buoyUpdate <- read_csv( "data-clean/buoy_update.csv",
                        na = c('99','999', 'NA'))
 ```
 
@@ -169,9 +167,11 @@ Here is the code you can use to fix the data without exporting and importing aga
 
 
 # turn every column into 'character', then turn them into doubles. 
-buoyUpdate <- buoyUpdate|> 
+buoyFinal <- buoyUpdate|> 
   mutate(across(everything(), as.character))|>
   mutate(across(.cols = everything(), ~parse_double(.x)))
+
+write_csv(buoyFinal, "data-clean/buoy_final.csv")
 
 
   
@@ -197,26 +197,25 @@ i <- aes(mm,
 j <- c("#FF83FA", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "#1FFFD4", "#EE3B3B", "#FF7F00", "#EE1289", "#1874CD", "#B03060" )
 
 # Picks the dataset, and the year I want to look at
-filter(buoy_final, 
-       yy == 2024
-       )|>
+filter(buoyFinal, yy == 2024)|>
 
 # Sets up a graphic for me
 ggplot()+
    
 # A smooth line to help track air temp average over 2024 
-geom_smooth(i)+
   
-  # Does the nice points
-  geom_point(aes(x = mm,
+# Does the nice points
+geom_jitter(aes(x = mm,
          y = atmp,
          alpha = factor(mm),
          color = factor(mm)
          ))+
-  
+    
     # Uses the colors picked above
     scale_color_manual(values = j)+
-  
+    
+    geom_smooth(i, color = 'Black')+
+    
     # Removes the legend
     theme(legend.position = "none")+
   
